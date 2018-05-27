@@ -1,5 +1,15 @@
 # serverless-go
-Apps for serverless architecture
+
+[![Go Report Card](https://goreportcard.com/badge/github.com/translucens/serverless-go)](https://goreportcard.com/report/github.com/translucens/serverless-go)
+
+Operational message reporting programs
+
+## Architecture
+
+```
+[SES] - [SNS] - [Lambda: ses2sns] - [SNS] - [Lambda: SNS2slack] - [Slack]
+```
+
 
 ## Prerequisites
 
@@ -10,7 +20,7 @@ pip install...
 
 1. Create SNS topic for SES; it should be located in same region as SES, i.e. us-east-1, us-west-2, or eu-west-1
 1. Setup SES Email Receiving
-    * Create rule and specify SNS topic; Encoding: `BASE64`
+    * Create rule and specify SNS topic; choose Encoding: `BASE64`
 1. Create SNS topic for proxying; it should be located in same region as other Lambda functions
 1. Create S3 Bucket for deploying; it should be located in same region as Lambda functions
 1. Create Slack incoming webhook URL via <https://my.slack.com/services/new/incoming-webhook/>
