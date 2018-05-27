@@ -1,0 +1,30 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+
+Parameters:
+    SNSTopicARNPubMail:
+        Type: String
+    SNSTopicPubMail:
+        Type: String
+
+
+Globals:
+  Function:
+    Timeout: 5
+
+Resources:
+    sns2slack:
+        Type: AWS::Serverless::Function
+        Properties:
+            Handler: ses2sns
+            Runtime: go1.x
+            CodeUri: bin/
+            Tracing: Active
+            Environment:
+                Variables:
+                   SNS_PUB_TOPIC: !Ref SNSTopicARNPubMail
+            Policies:
+                - CloudFormationDescribeStacksPolicy: {}
+                - SNSPublishMessagePolicy: {
+                    TopicName: !Ref SNSTopicPubMail
+                }

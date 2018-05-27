@@ -1,0 +1,34 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+
+Parameters:
+    SlackWebHookURL:
+        Type: String
+    PostSlackTemplate:
+        Type: String
+    EventSourceSNSARN:
+        Type: String
+
+Globals:
+  Function:
+    Timeout: 5
+
+Resources:
+    sns2slack:
+        Type: AWS::Serverless::Function
+        Properties:
+            Handler: sns2slack
+            Runtime: go1.x
+            CodeUri: bin/
+            Tracing: Active
+            Events:
+                CatchAll:
+                    Type: SNS
+                    Properties: 
+                        Topic: !Ref EventSourceSNSARN
+            Environment:
+                Variables:
+                   SLACK_WEBHOOK_URL: !Ref SlackWebHookURL
+                   POST_TEMPLATE: !Ref PostSlackTemplate
+            Policies:
+                - CloudFormationDescribeStacksPolicy: {}
